@@ -5,6 +5,7 @@ import org.example.GameSession;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class BoardGameDaoMemoryImpl implements BoardGameDao {
@@ -50,5 +51,10 @@ public class BoardGameDaoMemoryImpl implements BoardGameDao {
 
     @Override
     public void close() {
+    }
+
+    @Override
+    public Map<String, Map<String, Object>> getWinStatisticsByGame(String gameName) {
+        return Map.of();
     }
 }

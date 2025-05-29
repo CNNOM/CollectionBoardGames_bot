@@ -1,0 +1,9 @@
+[ {
+  "id" : "a8c60671-35b1-4341-8f13-278ac01d42d4",
+  "gameId" : "6f794bbf-c8e8-46cf-8c59-e179e4307a83",
+  "gameName" : "Мафия",
+  "dateTime" : [ 2025, 5, 8, 14, 57, 54, 595943000 ],
+  "players" : [ "Антон", "Марк" ],
+  "winner" : "Марк",
+  "status" : "IN_PROGRESS"
+} ]

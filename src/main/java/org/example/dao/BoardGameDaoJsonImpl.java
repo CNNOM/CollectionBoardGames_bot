@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -90,6 +91,11 @@ public class BoardGameDaoJsonImpl implements BoardGameDao {
 
     @Override
     public void close() {
+    }
+
+    @Override
+    public Map<String, Map<String, Object>> getWinStatisticsByGame(String gameName) {
+        return Map.of();
     }
 
     private void saveGames(List<BoardGame> games) {

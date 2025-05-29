@@ -65,7 +65,7 @@ public class BoardGameBot extends TelegramLongPollingBot {
             case "/addsession":
                 return sessionManager.addSession(args);
             case "/stats":
-//                return sessionManager.getStatistics();
+                return sessionManager.getWinStatistics(args);
             default:
                 return "❌ Неизвестная команда. Введите /help для списка команд.";
         }
@@ -86,7 +86,7 @@ public class BoardGameBot extends TelegramLongPollingBot {
                 "📅 Сессии:\n" +
                 "/history - Последние 5 игровых сессий\n" +
                 "/addsession [игра;игроки;победитель] - Добавить сессию\n" +
-                "/stats - Статистика игр\n\n" +
+                "/stats [название] - Статистика побед по игре\n\n" +
                 "❓ Помощь:\n" +
                 "/help - Справка по командам";
     }
@@ -116,12 +116,14 @@ public class BoardGameBot extends TelegramLongPollingBot {
         // Первый ряд кнопок
         KeyboardRow row1 = new KeyboardRow();
         row1.add("/games");
+        row1.add("/gameinfo");
         row1.add("/history");
 
         // Второй ряд кнопок
         KeyboardRow row2 = new KeyboardRow();
         row2.add("/addgame");
         row2.add("/addsession");
+        row2.add("/stats");
 
         // Третий ряд кнопок
         KeyboardRow row3 = new KeyboardRow();

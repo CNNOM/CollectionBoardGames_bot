@@ -1,0 +1,19 @@
+[
+    {
+    "id" : "6f794bbf-c8e8-46cf-8c59-e179e4307a83",
+    "name" : "Мафия",
+    "description" : "Мафия",
+    "category" : "Кооперативная",
+    "minPlayers" : 2,
+    "maxPlayers" : 4,
+    "averageTime" : 60
+  }, {
+    "id" : "11327cd1-540b-46e1-9454-a4e9a8c1bb9d",
+    "name" : "UNO",
+    "description" : "UNO",
+    "category" : "Карточная",
+    "minPlayers" : 2,
+    "maxPlayers" : 4,
+    "averageTime" : 60
+  }
+]
