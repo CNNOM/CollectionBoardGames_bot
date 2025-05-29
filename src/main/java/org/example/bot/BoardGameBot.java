@@ -49,25 +49,36 @@ public class BoardGameBot extends TelegramLongPollingBot {
         String cmd = parts[0].toLowerCase();
         String args = parts.length > 1 ? parts[1] : "";
 
-        switch (cmd) {
-            case "/start":
-                return getWelcomeMessage();
-            case "/help":
-                return getHelpMessage();
-            case "/games":
-                return gameManager.listAllGames();
-            case "/addgame":
-                return gameManager.addGame(args);
-            case "/gameinfo":
-                return gameManager.getGameInfo(args);
-            case "/history":
-                return sessionManager.getRecentSessions(5);
-            case "/addsession":
-                return sessionManager.addSession(args);
-            case "/stats":
-                return sessionManager.getWinStatistics(args);
-            default:
-                return "❌ Неизвестная команда. Введите /help для списка команд.";
+        try {
+            switch (cmd) {
+                case "/start":
+                    return getWelcomeMessage();
+                case "/help":
+                    return getHelpMessage();
+                case "/games":
+                    return gameManager.listAllGames();
+                case "/addgame":
+                    return gameManager.addGame(args);
+                case "/gameinfo":
+                    return gameManager.getGameInfo(args);
+                case "/history":
+                    // Теперь всегда получаем свежие данные
+                    return sessionManager.getRecentSessions(5);
+                case "/addsession":
+                    String result = sessionManager.addSession(args);
+                    // Принудительно обновляем статусы после добавления
+                    sessionManager.updateGameStatuses();
+                    return result;
+                case "/stats":
+                    // Статистика теперь всегда актуальная
+                    return sessionManager.getWinStatistics(args);
+                default:
+                    return "❌ Неизвестная команда. Введите /help для списка команд.";
+            }
+        } catch (Exception e) {
+            System.err.println("Error processing command: " + command);
+            e.printStackTrace();
+            return "⚠️ Произошла ошибка при обработке команды";
         }
     }
 

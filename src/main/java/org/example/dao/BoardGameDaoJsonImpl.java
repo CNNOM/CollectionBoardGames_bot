@@ -60,6 +60,7 @@ public class BoardGameDaoJsonImpl implements BoardGameDao {
         }
     }
 
+
     @Override
     public void addGame(BoardGame game) {
         List<BoardGame> games = getAllGames();

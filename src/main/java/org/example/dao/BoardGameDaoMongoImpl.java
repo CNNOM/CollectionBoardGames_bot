@@ -38,16 +38,6 @@ public class BoardGameDaoMongoImpl implements BoardGameDao {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public List<GameSession> getGameHistory() {
-        return sessionsCollection.find()
-                .sort(Sorts.descending("date"))
-                .into(new ArrayList<>())
-                .stream()
-                .map(this::documentToGameSession)
-                .collect(Collectors.toList());
-    }
-
 
     @Override
     public void addGame(BoardGame game) {
@@ -124,5 +114,19 @@ public class BoardGameDaoMongoImpl implements BoardGameDao {
                 doc.getString("winner"),
                 status
         );
+    }
+
+    @Override
+    public List<GameSession> getGameHistory() {
+        System.out.println("DEBUG: Fetching fresh game history from MongoDB");
+        List<Document> documents = sessionsCollection.find()
+                .sort(Sorts.descending("date"))
+                .into(new ArrayList<>());
+
+        System.out.println("DEBUG: Found " + documents.size() + " sessions in DB");
+
+        return documents.stream()
+                .map(this::documentToGameSession)
+                .collect(Collectors.toList());
     }
 }

@@ -22,6 +22,8 @@ public class BoardGameDaoMemoryImpl implements BoardGameDao {
         return new ArrayList<>(sessions);
     }
 
+
+
     @Override
     public void addGame(BoardGame game) {
         if (game.getId() == null) {
