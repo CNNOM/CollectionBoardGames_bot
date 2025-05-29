@@ -6,7 +6,9 @@ import org.example.dao.BoardGameDao;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GameSessionManager {
     private BoardGameDao boardGameDao;
@@ -83,4 +85,32 @@ public class GameSessionManager {
 
         return sb.toString();
     }
+
+    public String addSession(String input) {
+        if (input == null || input.isEmpty()) {
+            return "ℹ️ Укажите параметры: /addsession Игра;Игроки (через запятую);Победитель";
+        }
+        try {
+            String[] parts = input.split(";");
+            if (parts.length < 3) {
+                return "❌ Неверный формат. Используйте: /addsession Игра;Игроки (через запятую);Победитель";
+            }
+
+            String gameName = parts[0].trim();
+            String playersStr = parts[1].trim();
+            String winner = parts[2].trim();
+
+            List<String> players = Arrays.stream(playersStr.split(","))
+                    .map(String::trim)
+                    .collect(Collectors.toList());
+
+            addPlayedGame(gameName, winner, players);
+            return "✅ Сессия игры \"" + gameName + "\" успешно добавлена!";
+        } catch (IllegalArgumentException e) {
+            return "❌ Ошибка: " + e.getMessage();
+        } catch (Exception e) {
+            return "❌ Произошла ошибка при добавлении сессии";
+        }
+    }
+
 }

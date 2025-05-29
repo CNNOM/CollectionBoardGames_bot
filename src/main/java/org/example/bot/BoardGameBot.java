@@ -63,7 +63,7 @@ public class BoardGameBot extends TelegramLongPollingBot {
             case "/history":
                 return sessionManager.getRecentSessions(5);
             case "/addsession":
-//                return sessionManager.addSession(args);
+                return sessionManager.addSession(args);
             case "/stats":
 //                return sessionManager.getStatistics();
             default:
