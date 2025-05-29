@@ -53,8 +53,4 @@ public class BoardGameDaoMemoryImpl implements BoardGameDao {
     public void close() {
     }
 
-    @Override
-    public Map<String, Map<String, Object>> getWinStatisticsByGame(String gameName) {
-        return Map.of();
-    }
 }

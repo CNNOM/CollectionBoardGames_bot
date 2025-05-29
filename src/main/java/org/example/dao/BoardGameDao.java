@@ -14,7 +14,4 @@ public interface BoardGameDao extends AutoCloseable {
     void addGameSession(GameSession session);
     void updateGameSessionStatus(GameSession session);
     void close();
-
-    Map<String, Map<String, Object>> getWinStatisticsByGame(String gameName);
-
 }

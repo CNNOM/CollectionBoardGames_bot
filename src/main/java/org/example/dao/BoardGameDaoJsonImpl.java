@@ -93,11 +93,6 @@ public class BoardGameDaoJsonImpl implements BoardGameDao {
     public void close() {
     }
 
-    @Override
-    public Map<String, Map<String, Object>> getWinStatisticsByGame(String gameName) {
-        return Map.of();
-    }
-
     private void saveGames(List<BoardGame> games) {
         try {
             objectMapper.writerWithDefaultPrettyPrinter().writeValue(gamesFile, games);

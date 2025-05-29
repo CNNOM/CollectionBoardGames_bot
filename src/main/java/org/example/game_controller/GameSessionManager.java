@@ -2,11 +2,13 @@ package org.example.game_controller;
 
 import org.example.BoardGame;
 import org.example.GameSession;
+import org.example.PlayerStats;
 import org.example.dao.BoardGameDao;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -113,39 +115,4 @@ public class GameSessionManager {
             return "❌ Произошла ошибка при добавлении сессии";
         }
     }
-
-    public String getWinStatistics(String gameName) {
-        if (gameName == null || gameName.isEmpty()) {
-            return "ℹ️ Укажите название игры: /stats НазваниеИгры";
-        }
-
-        Map<String, Map<String, Object>> stats = boardGameDao.getWinStatisticsByGame(gameName);
-
-        if (stats.isEmpty()) {
-            return "❌ Нет данных об игре \"" + gameName + "\"";
-        }
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("🏆 Статистика для игры \"").append(gameName).append("\":\n\n");
-
-        // Сортируем по количеству побед (по убыванию)
-        stats.entrySet().stream()
-                .sorted((e1, e2) ->
-                        ((Integer)e2.getValue().get("wins")).compareTo((Integer)e1.getValue().get("wins")))
-                .forEach(entry -> {
-                    String player = entry.getKey();
-                    int wins = (Integer) entry.getValue().get("wins");
-                    long totalGames = (Long) entry.getValue().get("totalGames");
-                    double percentage = (Double) entry.getValue().get("percentage");
-
-                    sb.append("👤 ").append(player).append(": ")
-                            .append(wins).append(" побед (")
-                            .append(String.format("%.1f", percentage)).append("%)\n");
-                });
-
-        sb.append("\nВсего сыграно игр: ").append(stats.values().iterator().next().get("totalGames"));
-
-        return sb.toString();
-    }
-
 }
