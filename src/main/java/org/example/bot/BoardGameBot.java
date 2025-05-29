@@ -17,14 +17,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BoardGameBot extends TelegramLongPollingBot {
-    private final GameManager gameManager;
-    private final GameSessionManager sessionManager;
-    private final BoardGameDao dao;
+    private GameManager gameManager;
+    private GameSessionManager sessionManager;
+    private BoardGameDao dao;
+    private String currentStorageType = "mongodb"; // default storage
 
     public BoardGameBot() {
-        this.dao = DaoFactory.createTaskDao("mongodb");
+        initDao(currentStorageType);
+    }
+
+    private void initDao(String storageType) {
+        this.dao = DaoFactory.createTaskDao(storageType);
         this.gameManager = new GameManager(dao);
         this.sessionManager = new GameSessionManager(dao);
+        this.currentStorageType = storageType;
     }
 
     @Override
@@ -72,6 +78,8 @@ public class BoardGameBot extends TelegramLongPollingBot {
                 case "/stats":
                     // Статистика теперь всегда актуальная
                     return sessionManager.getWinStatistics(args);
+                case "/setstorage":
+                    return setStorageType(args);
                 default:
                     return "❌ Неизвестная команда. Введите /help для списка команд.";
             }
@@ -98,8 +106,22 @@ public class BoardGameBot extends TelegramLongPollingBot {
                 "/history - Последние 5 игровых сессий\n" +
                 "/addsession [игра;игроки;победитель] - Добавить сессию\n" +
                 "/stats [название] - Статистика побед по игре\n\n" +
+                "⚙️ Настройки:\n" +
+                "/setstorage [memory|mongodb|json] - Изменить источник данных\n\n" +
+                "Текущее хранилище: " + currentStorageType +"\n\n"+
                 "❓ Помощь:\n" +
                 "/help - Справка по командам";
+    }
+
+    private String setStorageType(String storageType) {
+        try {
+            initDao(storageType);
+            return "✅ Источник данных изменен на: " + storageType +
+                    "\nТекущее хранилище: " + currentStorageType;
+        } catch (Exception e) {
+            return "❌ Ошибка при смене хранилища: " + e.getMessage() +
+                    "\nДоступные варианты: memory, mongodb, json";
+        }
     }
 
     private void sendMessage(String chatId, String text) {
@@ -140,9 +162,15 @@ public class BoardGameBot extends TelegramLongPollingBot {
         KeyboardRow row3 = new KeyboardRow();
         row3.add("/help");
 
+        KeyboardRow row4 = new KeyboardRow();
+        row4.add("/setstorage");
+
+
         keyboard.add(row1);
         keyboard.add(row2);
         keyboard.add(row3);
+        keyboard.add(row4);
+
 
         keyboardMarkup.setKeyboard(keyboard);
         keyboardMarkup.setResizeKeyboard(true);

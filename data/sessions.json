@@ -1,9 +1,10 @@
 [ {
-  "id" : "a8c60671-35b1-4341-8f13-278ac01d42d4",
-  "gameId" : "6f794bbf-c8e8-46cf-8c59-e179e4307a83",
-  "gameName" : "Мафия",
-  "dateTime" : [ 2025, 5, 8, 14, 57, 54, 595943000 ],
-  "players" : [ "Антон", "Марк" ],
-  "winner" : "Марк",
-  "status" : "IN_PROGRESS"
+  "id" : "3e06ef36-9259-4de4-bf87-85783938a3a7",
+  "gameId" : "2bb6253c-94d6-461b-9169-89980bd550d9",
+  "gameName" : "Манчкин",
+  "dateTime" : [ 2025, 5, 29, 22, 58, 3, 224557900 ],
+  "players" : [ "Анна", "Борис", "Виктор" ],
+  "winner" : "Виктор",
+  "status" : "IN_PROGRESS",
+  "playersAsString" : "Анна, Борис, Виктор"
 } ]

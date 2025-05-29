@@ -8,10 +8,9 @@ import org.example.GameSession;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class BoardGameDaoJsonImpl implements BoardGameDao {
@@ -53,13 +52,15 @@ public class BoardGameDaoJsonImpl implements BoardGameDao {
         }
 
         try {
-            return objectMapper.readValue(sessionsFile, new TypeReference<List<GameSession>>() {});
+            List<GameSession> sessions = objectMapper.readValue(sessionsFile, new TypeReference<List<GameSession>>() {});
+            // Сортируем по дате (новые сначала)
+            sessions.sort((s1, s2) -> s2.getDateTime().compareTo(s1.getDateTime()));
+            return sessions;
         } catch (IOException e) {
             e.printStackTrace();
             return new ArrayList<>();
         }
     }
-
 
     @Override
     public void addGame(BoardGame game) {
@@ -92,6 +93,7 @@ public class BoardGameDaoJsonImpl implements BoardGameDao {
 
     @Override
     public void close() {
+        // Ничего не нужно закрывать для JSON
     }
 
     private void saveGames(List<BoardGame> games) {
