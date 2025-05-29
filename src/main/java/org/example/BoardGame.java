@@ -62,4 +62,38 @@ public class BoardGame {
                 name, minPlayers, maxPlayers, averageTime
         );
     }
+
+    public String toFormattedString() {
+        return String.format(
+                "🎲 <b>%s</b>\n" +
+                        "📝 %s\n" +
+                        "👥 Игроки: %d-%d\n" +
+                        "⏱ Время: %d мин\n" +
+                        "🏷 Категория: %s",
+                name,
+                description,
+                minPlayers,
+                maxPlayers,
+                averageTime,
+                category
+        );
+    }
+
+    public String toDetailedString() {
+        return String.format(
+                "🎲 <b>%s</b>\n\n" +
+                        "📝 <b>Описание:</b> %s\n\n" +
+                        "👥 <b>Количество игроков:</b> %d-%d\n" +
+                        "⏱ <b>Среднее время игры:</b> %d минут\n" +
+                        "🏷 <b>Категория:</b> %s\n" +
+                        "🆔 <b>ID:</b> %s",
+                name,
+                description,
+                minPlayers,
+                maxPlayers,
+                averageTime,
+                category,
+                id != null ? id : "не указан"
+        );
+    }
 }
