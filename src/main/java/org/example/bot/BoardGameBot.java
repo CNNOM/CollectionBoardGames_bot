@@ -50,7 +50,7 @@ public class BoardGameBot extends TelegramLongPollingBot {
         }
     }
 
-    private String processCommand(String chatId, String command) {
+    public String processCommand(String chatId, String command) {
         String[] parts = command.split(" ", 2);
         String cmd = parts[0].toLowerCase();
         String args = parts.length > 1 ? parts[1] : "";
