@@ -96,7 +96,7 @@ public class GameManager {
 
     public String getGameInfo(String gameName) {
         if (gameName == null || gameName.isEmpty()) {
-            return "ℹ️ Укажите название игры: /gameinfo НазваниеИгры";
+            return "ℹ️ Укажите название игры: /filtergame НазваниеИгры";
         }
 
         BoardGame game = findGameByName(gameName);

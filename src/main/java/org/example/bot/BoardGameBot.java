@@ -1,7 +1,7 @@
 package org.example.bot;
 
+import org.example.GameSession;
 import org.example.dao.BoardGameDao;
-import org.example.dao.BoardGameDaoJsonImpl;
 import org.example.dao.DaoFactory;
 import org.example.game_controller.GameManager;
 import org.example.game_controller.GameSessionManager;
@@ -13,17 +13,23 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class BoardGameBot extends TelegramLongPollingBot {
+
     private GameManager gameManager;
     private GameSessionManager sessionManager;
     private BoardGameDao dao;
     private String currentStorageType = "mongodb"; // default storage
+    private List<GameSession> gameHistory;
 
     public BoardGameBot() {
         initDao(currentStorageType);
+        this.gameHistory = dao.getGameHistory();
     }
 
     private void initDao(String storageType) {
@@ -65,21 +71,23 @@ public class BoardGameBot extends TelegramLongPollingBot {
                     return gameManager.listAllGames();
                 case "/addgame":
                     return gameManager.addGame(args);
-                case "/gameinfo":
-                    return gameManager.getGameInfo(args);
                 case "/history":
-                    // Теперь всегда получаем свежие данные
                     return sessionManager.getRecentSessions(5);
                 case "/addsession":
                     String result = sessionManager.addSession(args);
-                    // Принудительно обновляем статусы после добавления
                     sessionManager.updateGameStatuses();
                     return result;
                 case "/stats":
-                    // Статистика теперь всегда актуальная
                     return sessionManager.getWinStatistics(args);
                 case "/setstorage":
                     return setStorageType(args);
+                case "/filterdate":
+                    return filterByDate(args);
+                case "/filterstatus":
+                    return filterByStatus(args);
+                case "/filtergame":
+                    return gameManager.getGameInfo(args);
+
                 default:
                     return "❌ Неизвестная команда. Введите /help для списка команд.";
             }
@@ -100,7 +108,6 @@ public class BoardGameBot extends TelegramLongPollingBot {
         return "📋 Доступные команды:\n\n" +
                 "🎮 Игры:\n" +
                 "/games - Список всех игр\n" +
-                "/gameinfo [название] - Информация об игре\n" +
                 "/addgame [название;описание;категория;мин_игроков;макс_игроков;время] - Добавить игру\n\n" +
                 "📅 Сессии:\n" +
                 "/history - Последние 5 игровых сессий\n" +
@@ -108,7 +115,11 @@ public class BoardGameBot extends TelegramLongPollingBot {
                 "/stats [название] - Статистика побед по игре\n\n" +
                 "⚙️ Настройки:\n" +
                 "/setstorage [memory|mongodb|json] - Изменить источник данных\n\n" +
-                "Текущее хранилище: " + currentStorageType +"\n\n"+
+                "Текущее хранилище: " + currentStorageType + "\n\n" +
+                "🔍 Фильтры:\n" +
+                "/filterdate [начало;конец] - Фильтр по дате (формат: ГГГГ-ММ-ДД)\n" +
+                "/filterstatus [STATUS] - Фильтр по статусу (IN_PROGRESS, PLAYED)\n" +
+                "/filtergame [название] - Фильтр по названию игры\n" +
                 "❓ Помощь:\n" +
                 "/help - Справка по командам";
     }
@@ -124,14 +135,60 @@ public class BoardGameBot extends TelegramLongPollingBot {
         }
     }
 
+    private String filterByDate(String dateArgs) {
+        try {
+            String[] dates = dateArgs.split(";");
+            LocalDate fromDate = dates.length > 0 && !dates[0].isEmpty() ? LocalDate.parse(dates[0]) : null;
+            LocalDate toDate = dates.length > 1 && !dates[1].isEmpty() ? LocalDate.parse(dates[1]) : null;
+
+            List<GameSession> filteredSessions = gameHistory.stream()
+                    .filter(session -> fromDate == null || !session.getDateTime().toLocalDate().isBefore(fromDate))
+                    .filter(session -> toDate == null || !session.getDateTime().toLocalDate().isAfter(toDate))
+                    .collect(Collectors.toList());
+
+            return formatFilteredSessions("📅 Сессии по дате:", filteredSessions);
+        } catch (Exception e) {
+            return "⚠️ Ошибка формата. Используйте: /filterdate [начальная_дата;конечная_дата]\n" +
+                    "Пример: /filterdate 2023-01-01;2023-12-31";
+        }
+    }
+
+    private String filterByStatus(String statusArg) {
+        try {
+            GameSession.GameStatus status = GameSession.GameStatus.valueOf(statusArg.trim().toUpperCase());
+            List<GameSession> filteredSessions = gameHistory.stream()
+                    .filter(session -> session.getStatus() == status)
+                    .collect(Collectors.toList());
+
+            return formatFilteredSessions("🏆 Сессии по статусу '" + status + "':", filteredSessions);
+        } catch (IllegalArgumentException e) {
+            return "⚠️ Неверный статус. Доступные статусы:\n" +
+                    Arrays.stream(GameSession.GameStatus.values())
+                            .map(Enum::name)
+                            .collect(Collectors.joining(", ")) +
+                    "\nПример: /filterstatus IN_PROGRESS";
+        }
+    }
+
+    private String formatFilteredSessions(String header, List<GameSession> sessions) {
+        if (sessions.isEmpty()) {
+            return "🔍 Не найдено сессий по указанным критериям.";
+        }
+
+        StringBuilder result = new StringBuilder(header).append("\n\n");
+        for (GameSession session : sessions) {
+            result.append(session.toString()).append("\n\n");
+        }
+        return result.toString();
+    }
+
     private void sendMessage(String chatId, String text) {
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
         message.setText(text);
         message.enableHtml(true);
 
-        // Добавляем клавиатуру для основных команд
-        if (text.equals(getWelcomeMessage())){
+        if (text.equals(getWelcomeMessage())) {
             message.setReplyMarkup(createMainKeyboard());
         }
 
@@ -146,31 +203,26 @@ public class BoardGameBot extends TelegramLongPollingBot {
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
         List<KeyboardRow> keyboard = new ArrayList<>();
 
-        // Первый ряд кнопок
         KeyboardRow row1 = new KeyboardRow();
         row1.add("/games");
-        row1.add("/gameinfo");
+        row1.add("/filtergame");
         row1.add("/history");
 
-        // Второй ряд кнопок
         KeyboardRow row2 = new KeyboardRow();
         row2.add("/addgame");
         row2.add("/addsession");
         row2.add("/stats");
 
-        // Третий ряд кнопок
         KeyboardRow row3 = new KeyboardRow();
         row3.add("/help");
 
         KeyboardRow row4 = new KeyboardRow();
         row4.add("/setstorage");
 
-
         keyboard.add(row1);
         keyboard.add(row2);
         keyboard.add(row3);
         keyboard.add(row4);
-
 
         keyboardMarkup.setKeyboard(keyboard);
         keyboardMarkup.setResizeKeyboard(true);
