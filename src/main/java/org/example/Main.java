@@ -6,8 +6,8 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 public class Main {
-    private static final String BOT_TOKEN = "7978010225:AAGIC6g0LSgsdUzXfVwhMjL9N3DX2E3RfdU";
-    private static final String BOT_USERNAME = "CollectionBoardGames_bot";
+    private static final String BOT_TOKEN = "8146130795:AAHDBCf6xfVsblYlK1-BZKAcFdS1aUPCEa8";
+    private static final String BOT_USERNAME = "TabletopGameAdvisorVSTU_bot";
 
     public static void main(String[] args) {
         try {

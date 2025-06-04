@@ -19,7 +19,6 @@ public class BoardGameDaoMemoryImpl implements BoardGameDao {
 
     @Override
     public List<GameSession> getGameHistory() {
-        // Возвращаем копию, отсортированную по дате (новые сначала)
         return sessions.stream()
                 .sorted((s1, s2) -> s2.getDateTime().compareTo(s1.getDateTime()))
                 .collect(Collectors.toList());

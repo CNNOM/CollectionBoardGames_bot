@@ -99,7 +99,7 @@ public class BoardGameBot extends TelegramLongPollingBot {
     }
 
     private String getWelcomeMessage() {
-        return "🎲 Добро пожаловать в BoardGameBot!\n\n" +
+        return "🎲 Добро пожаловать в Tabletop Game Advisor!\n\n" +
                 "Я помогу вам управлять коллекцией настольных игр и отслеживать игровые сессии.\n\n" +
                 getHelpMessage();
     }
@@ -203,21 +203,27 @@ public class BoardGameBot extends TelegramLongPollingBot {
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
         List<KeyboardRow> keyboard = new ArrayList<>();
 
+        // Первый ряд - основные команды
         KeyboardRow row1 = new KeyboardRow();
-        row1.add("/games");
-        row1.add("/filtergame");
-        row1.add("/history");
+        row1.add("🎮 Список игр");
+        row1.add("🔍 Поиск игры");
+        row1.add("📊 Статистика");
 
+        // Второй ряд - управление сессиями
         KeyboardRow row2 = new KeyboardRow();
-        row2.add("/addgame");
-        row2.add("/addsession");
-        row2.add("/stats");
+        row2.add("📅 История игр");
+        row2.add("➕ Добавить игру");
+        row2.add("🎲 Добавить сессию");
 
+        // Третий ряд - фильтры
         KeyboardRow row3 = new KeyboardRow();
-        row3.add("/help");
+        row3.add("📅 Фильтр по дате");
+        row3.add("🏷 Фильтр по статусу");
 
+        // Четвертый ряд - настройки и помощь
         KeyboardRow row4 = new KeyboardRow();
-        row4.add("/setstorage");
+        row4.add("⚙️ Настройки");
+        row4.add("❓ Помощь");
 
         keyboard.add(row1);
         keyboard.add(row2);
@@ -226,6 +232,9 @@ public class BoardGameBot extends TelegramLongPollingBot {
 
         keyboardMarkup.setKeyboard(keyboard);
         keyboardMarkup.setResizeKeyboard(true);
+        keyboardMarkup.setOneTimeKeyboard(false);
+        keyboardMarkup.setSelective(true);
+
         return keyboardMarkup;
     }
 
