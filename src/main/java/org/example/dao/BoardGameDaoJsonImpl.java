@@ -53,7 +53,6 @@ public class BoardGameDaoJsonImpl implements BoardGameDao {
 
         try {
             List<GameSession> sessions = objectMapper.readValue(sessionsFile, new TypeReference<List<GameSession>>() {});
-            // Сортируем по дате (новые сначала)
             sessions.sort((s1, s2) -> s2.getDateTime().compareTo(s1.getDateTime()));
             return sessions;
         } catch (IOException e) {
@@ -93,7 +92,6 @@ public class BoardGameDaoJsonImpl implements BoardGameDao {
 
     @Override
     public void close() {
-        // Ничего не нужно закрывать для JSON
     }
 
     private void saveGames(List<BoardGame> games) {

@@ -1,10 +1,41 @@
 [ {
+  "id" : "6eb2758b-6ef0-4da4-be1d-39c5f4063c78",
+  "gameId" : "2bb6253c-94d6-461b-9169-89980bd550d9",
+  "gameName" : "Манчкин",
+  "dateTime" : [ 2025, 6, 4, 23, 19, 41, 132106500 ],
+  "players" : [ "Виктор", "Борис" ],
+  "winner" : "Виктор",
+  "status" : "IN_PROGRESS"
+}, {
+  "id" : "00d7834b-fea8-4339-896a-ed8e557f65ee",
+  "gameId" : "2bb6253c-94d6-461b-9169-89980bd550d9",
+  "gameName" : "Манчкин",
+  "dateTime" : [ 2025, 6, 4, 23, 12, 1, 999774600 ],
+  "players" : [ "Виктор", "Борис" ],
+  "winner" : "Виктор",
+  "status" : "IN_PROGRESS"
+}, {
   "id" : "3e06ef36-9259-4de4-bf87-85783938a3a7",
   "gameId" : "2bb6253c-94d6-461b-9169-89980bd550d9",
   "gameName" : "Манчкин",
   "dateTime" : [ 2025, 5, 29, 22, 58, 3, 224557900 ],
   "players" : [ "Анна", "Борис", "Виктор" ],
+  "winner" : "Анна",
+  "status" : "PLAYED"
+}, {
+  "id" : "3e06ef36-9259-4de4-bf87-85783938a3a7",
+  "gameId" : "2bb6253c-94d6-461b-9169-89980bd550d9",
+  "gameName" : "Манчкин",
+  "dateTime" : [ 2025, 5, 29, 22, 58, 3, 224557900 ],
+  "players" : [ "Анна", "Борис", "Виктор" ],
+  "winner" : "Анна",
+  "status" : "PLAYED"
+}, {
+  "id" : "c410e019-84a8-41bc-ae31-b35a657ec5c3",
+  "gameId" : "2bb6253c-94d6-461b-9169-89980bd550d9",
+  "gameName" : "Манчкин",
+  "dateTime" : [ 2025, 5, 4, 23, 20, 7, 712703700 ],
+  "players" : [ "Виктор", "Борис" ],
   "winner" : "Виктор",
-  "status" : "IN_PROGRESS",
-  "playersAsString" : "Анна, Борис, Виктор"
+  "status" : "IN_PROGRESS"
 } ]

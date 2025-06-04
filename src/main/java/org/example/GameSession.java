@@ -1,6 +1,7 @@
 package org.example;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
@@ -55,6 +56,7 @@ public class GameSession {
     public void setWinner(String winner) { this.winner = winner; }
     public void setStatus(GameStatus status) { this.status = status; }
 
+    @JsonIgnore
     public String getPlayersAsString() {
         return players != null ? String.join(", ", players) : "";
     }
